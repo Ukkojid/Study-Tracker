@@ -21,7 +21,7 @@ const app = express();
 // Security middleware
 app.use(helmet()); // Set security HTTP headers
 app.use(cors()); // Enable CORS
-app.use(express.json({ limit: '10kb' })); // Body parser, reading data from body into req.body
+app.use(express.json()); // Body parser, reading data from body into req.body
 app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 app.use(xss()); // Data sanitization against XSS
 app.use(hpp()); // Prevent parameter pollution
@@ -36,6 +36,13 @@ app.use(hpp()); // Prevent parameter pollution
 
 // Compression middleware
 app.use(compression());
+
+app.get("/", (req, res) => {
+  res.send({
+    activeStatus: true,
+    error: false
+  })
+})
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '..', process.env.FILE_UPLOAD_PATH)));
